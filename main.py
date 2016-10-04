@@ -1,6 +1,5 @@
-# import logging
 import webapp2
 
 app = webapp2.WSGIApplication([
-    ('/', 'base_page.HelloWorld'),
+    ('/', 'base_page.AddCard'),
 ], debug=True)

@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>Add Card</h1>
-    <form action="post">
+    <form action="/" method="post">
       Card name:
       <input type="text" name="card_name"><br>
       <input type="radio" name="card_type" value="visa" checked> Visa 
@@ -18,7 +18,8 @@
       URL for points explanation:
       <input type="url" name="points_explanation"><br>
       Week started:
-      <input type="week" name="week_started">
+      <input type="week" name="week_started"><br>
+      <input class="btn btn-primary" type="submit" value="Save">
     </form>
   </body>
 </html>
