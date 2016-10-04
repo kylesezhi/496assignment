@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Add Card</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+  <body>
+    <h1>Add Card</h1>
+    <form action="post">
+      Card name:
+      <input type="text" name="card_name"><br>
+      <input type="radio" name="card_type" value="visa" checked> Visa 
+      <input type="radio" name="card_type" value="mastercard"> Mastercard
+      <input type="radio" name="card_type" value="amex"> American Express
+      <input type="radio" name="card_type" value="other"> Other<br>
+      <input type="checkbox" name="signup_bonus" value="signup_gotten"> Signup bonus has been received.<br>
+      URL for points explanation:
+      <input type="url" name="points_explanation"><br>
+      Week started:
+      <input type="week" name="week_started">
+    </form>
+  </body>
+</html>
