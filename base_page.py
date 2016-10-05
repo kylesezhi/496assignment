@@ -10,7 +10,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 )
 
 
-class AddCard(webapp2.RequestHandler):
+class ViewCards(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('add.html')
         self.response.write(template.render())

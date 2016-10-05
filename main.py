@@ -1,5 +1,6 @@
 import webapp2
 
 app = webapp2.WSGIApplication([
-    ('/', 'base_page.AddCard'),
+    ('/', 'base_page.ViewCards'),
+    ('/admin', 'admin.Admin'),
 ], debug=True)
