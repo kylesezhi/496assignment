@@ -23,5 +23,5 @@ class Edit(base_page.BaseHandler):
         print('DEBUG')
         self.template_variables['card'] = card.returnDict()
         print(self.template_variables['card'])
-        self.render('add.html')
+        self.render('edit.html')
     

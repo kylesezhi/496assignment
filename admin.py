@@ -20,7 +20,6 @@ class Admin(base_page.BaseHandler):
     def post(self):
         action = self.request.get('action')
         if action == 'add_card':
-            # print(self.request)
             k = ndb.Key(db_definitions.Card, self.app.config.get('default-group'))
             card = db_definitions.Card(parent=k)
             card.name = self.request.get('card_name')   # TODO more elegant plz
@@ -35,6 +34,8 @@ class Admin(base_page.BaseHandler):
             card.put()
             self.template_variables['message'] = 'Added ' + card.name + '.'
             self.render('admin.html')
+        elif action == 'edit_card':
+            sleep(1) # TODO
         else:
             self.template_variables['message'] = action + ' is unknown.'
             self.render('admin.html')
