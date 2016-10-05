@@ -34,11 +34,18 @@
           <td>{{ card.key }}</td>
           <td>{{ card.name }}</td>
           <td>{{ card.card_type }}</td>
-          <td>{{ card.signup_bonus }}</td>
+          <!-- <td>{{ card.signup_bonus }}</td> -->
+          <td>
+          {% if card.signup_bonus %}
+          Yes
+          {% else %}
+          No
+          {% endif %}
+          </td>
           <td>{{ card.points_url }}</td>
           <td>{{ card.date_started }}</td>
           <td><a class="btn btn-primary" href="/edit?key={{ card.key }}" role="button">Edit</a></td>
-          <td><a class="btn btn-primary" href="/delete?key={{ card.key }}" role="button">Delete</a></td>
+          <td><a class="btn btn-danger" href="/delete?key={{ card.key }}" role="button">Delete</a></td>
         </tr>
         {% endfor %}
       </table>

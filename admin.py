@@ -11,7 +11,7 @@ class Admin(base_page.BaseHandler):
         self.template_variables = {}
         
     def render(self, page):
-        self.template_variables['cards'] = [x.returnDict() for x in db_definitions.Card.query().fetch()]
+        self.template_variables['cards'] = [x.returnDict() for x in db_definitions.Card.query(ancestor=ndb.Key(db_definitions.Card, self.app.config.get('default-group'))).fetch()]
         base_page.BaseHandler.render(self, page, self.template_variables)
         
     def get(self):
