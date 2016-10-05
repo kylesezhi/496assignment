@@ -12,7 +12,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class ViewCards(webapp2.RequestHandler):
     def get(self):
-        template = JINJA_ENVIRONMENT.get_template('add.html')
+        template = JINJA_ENVIRONMENT.get_template('modify.html')
         self.response.write(template.render())
 
     def post(self):
