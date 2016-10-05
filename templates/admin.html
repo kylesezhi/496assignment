@@ -11,11 +11,12 @@
       {{ message }}
     </div>
     {% endif %}
-    <a class="btn btn-primary" href="/add" role="button">Add Card</a>
+    <a class="btn btn-primary" href="/add" role="button">+ Add Card</a>
     <div class="panel panel-default">
       <!-- Default panel contents -->
       <div class="panel-heading">Cards Admin</div>
-
+      
+      {% if cards|length > 0 %}
       <!-- Table -->
       <table class="table">
         <tr>
@@ -28,6 +29,22 @@
           <th></th>
           <th></th>
         </tr>
+        {% for card in cards %}
+        <tr>
+          <td>{{ card.key }}</td>
+          <td>{{ card.name }}</td>
+          <td>{{ card.card_type }}</td>
+          <td>{{ card.signup_bonus }}</td>
+          <td>{{ card.points_url }}</td>
+          <td>{{ card.date_started }}</td>
+          <td><a class="btn btn-primary" href="/edit?key={{ card.key }}" role="button">Edit</a></td>
+          <td><a class="btn btn-primary" href="/delete?key={{ card.key }}" role="button">Delete</a></td>
+        </tr>
+        {% endfor %}
       </table>
-    </div>  </body>
+      {% else %}
+      <h3>The database is empty.</h3>
+      {% endif %}
+    </div>  
+  </body>
 </html>

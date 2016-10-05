@@ -6,6 +6,14 @@ from datetime import datetime
 
 
 class Admin(base_page.BaseHandler):
+    def __init__(self, request, response):
+        self.initialize(request, response)
+        self.template_variables = {}
+        
+    def render(self, page):
+        self.template_variables['cards'] = [x.returnDict() for x in db_definitions.Card.query().fetch()]
+        base_page.BaseHandler.render(self, page, self.template_variables)
+        
     def get(self):
         self.render('admin.html')
 
@@ -25,6 +33,8 @@ class Admin(base_page.BaseHandler):
             d = datetime.strptime(self.request.get('date_started'), '%Y-%m-%d')
             card.date_started = d
             card.put()
-            self.render('admin.html', {'message': 'Added ' + card.name + '.'})
+            self.template_variables['message'] = 'Added ' + card.name + '.'
+            self.render('admin.html')
         else:
-            self.render('admin.html', {'message': action + ' is unknown.'})
+            self.template_variables['message'] = action + ' is unknown.'
+            self.render('admin.html')
