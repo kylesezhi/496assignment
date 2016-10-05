@@ -9,6 +9,7 @@
     <!-- TODO http://bootsnipp.com/forms -->
     <h1>Add Card</h1>
     <form action="/" method="post">
+      <input type="hidden" name="action" value="add_card">
       Card name:
       <input type="text" name="card_name"><br>
       <input type="radio" name="card_type" value="visa" checked> Visa 
@@ -17,7 +18,7 @@
       <input type="radio" name="card_type" value="other"> Other<br>
       <input type="checkbox" name="signup_bonus" value="signup_gotten"> Signup bonus has been received.<br>
       URL for points explanation:
-      <input type="url" name="points_url"><br>
+      <input type="text" name="points_url"><br>
       Week started:
       <input type="week" name="week_started"><br>
       <input class="btn btn-primary" type="submit" value="Save">
