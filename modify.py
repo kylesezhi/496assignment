@@ -10,7 +10,7 @@ class Add(base_page.BaseHandler):
 
 
 class Edit(base_page.BaseHandler):
-    def __init__(self, request, response):
+    def __init__(self, request, response): # TODO move to BaseHandler
         self.initialize(request, response)
         self.template_variables = {}
 
@@ -22,4 +22,3 @@ class Edit(base_page.BaseHandler):
         card = card_key.get()
         self.template_variables['card'] = card.returnDict()
         self.render('edit.html')
-    
