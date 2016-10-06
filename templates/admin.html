@@ -30,7 +30,17 @@
         {% for card in cards %}
         <tr>
           <td>{{ card.name }}</td>
-          <td>{{ card.card_type }}</td>
+          <td>
+            {% if card.card_type == 'visa' %}
+            Visa
+            {% elif card.card_type == 'mastercard' %}
+            MasterCard
+            {% elif card.card_type == 'amex' %}
+            American Express
+            {% else %}
+            Other
+            {% endif %}
+          </td>
           <!-- <td>{{ card.signup_bonus }}</td> -->
           <td>
           {% if card.signup_bonus %}
