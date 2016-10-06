@@ -20,7 +20,6 @@
       <!-- Table -->
       <table class="table">
         <tr>
-          <th>#</th>
           <th>Card name</th>
           <th>Card type</th>
           <th>Signup bonus received?</th>
@@ -31,7 +30,6 @@
         </tr>
         {% for card in cards %}
         <tr>
-          <td>{{ card.key }}</td>
           <td>{{ card.name }}</td>
           <td>{{ card.card_type }}</td>
           <!-- <td>{{ card.signup_bonus }}</td> -->
@@ -42,7 +40,7 @@
           No
           {% endif %}
           </td>
-          <td><a href="card.points_url">{{ card.points_url }}</a></td>
+          <td><a href="{{ card.points_url }}">{{ card.points_url }}</a></td>
           <td>{{ card.date_started }}</td>
           <td><a class="btn btn-primary" href="/edit?key={{ card.key }}" role="button">Edit</a></td>
           <td><a class="btn btn-danger" href="/delete?key={{ card.key }}" role="button">Delete</a></td>
