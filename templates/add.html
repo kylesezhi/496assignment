@@ -11,16 +11,16 @@
     <form action="/" method="post">
       <input type="hidden" name="action" value="add_card">
       Card name:
-      <input type="text" name="card_name"><br>
+      <input type="text" name="card_name" required><br>
       <input type="radio" name="card_type" value="visa" checked> Visa 
       <input type="radio" name="card_type" value="mastercard"> Mastercard
       <input type="radio" name="card_type" value="amex"> American Express
       <input type="radio" name="card_type" value="other"> Other<br>
       <input type="checkbox" name="signup_bonus" value="signup_gotten"> Signup bonus has been received.<br>
       URL for points explanation:
-      <input type="text" name="points_url"><br>
+      <input type="text" name="points_url" required><br>
       Week started:
-      <input type="date" name="date_started"><br>
+      <input type="date" name="date_started" required><br>
       <input class="btn btn-primary" type="submit" value="Save">
     </form>
   </body>

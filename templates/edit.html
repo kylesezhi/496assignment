@@ -12,16 +12,16 @@
       <input type="hidden" name="action" value="edit_card">
       <input type="hidden" name="key" value="{{ card.key }}">
       Card name:
-      <input type="text" name="card_name" value="{{ card.name }}"><br>
+      <input type="text" name="card_name" value="{{ card.name }}" required><br>
       <input type="radio" name="card_type" value="visa"{% if card.card_type == 'visa' %} checked{% endif %}> Visa 
       <input type="radio" name="card_type" value="mastercard"{% if card.card_type == 'mastercard' %} checked{% endif %}> Mastercard
       <input type="radio" name="card_type" value="amex"{% if card.card_type == 'amex' %} checked{% endif %}> American Express
       <input type="radio" name="card_type" value="other"{% if card.card_type == 'other' %} checked{% endif %}> Other<br>
       <input type="checkbox" name="signup_bonus" value="signup_gotten"> Signup bonus has been received.<br>
       URL for points explanation:
-      <input type="text" name="points_url" value="{{ card.points_url }}"><br>
+      <input type="text" name="points_url" value="{{ card.points_url }}" required><br>
       Week started:
-      <input type="date" name="date_started" value="{{ card.date_started }}"><br>
+      <input type="date" name="date_started" value="{{ card.date_started }}" required><br>
       <input class="btn btn-primary" type="submit" value="Save">
     </form>
   </body>
