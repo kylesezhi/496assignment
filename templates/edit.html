@@ -10,6 +10,7 @@
     <h1>Edit Card</h1>
     <form action="/" method="post">
       <input type="hidden" name="action" value="edit_card">
+      <input type="hidden" name="key" value="{{ card.key }}">
       Card name:
       <input type="text" name="card_name" value="{{ card.name }}"><br>
       <input type="radio" name="card_type" value="visa"{% if card.card_type == 'visa' %} checked{% endif %}> Visa 

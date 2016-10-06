@@ -20,8 +20,6 @@ class Edit(base_page.BaseHandler):
     def get(self):
         card_key = ndb.Key(urlsafe=self.request.get('key'))
         card = card_key.get()
-        print('DEBUG')
         self.template_variables['card'] = card.returnDict()
-        print(self.template_variables['card'])
         self.render('edit.html')
     
