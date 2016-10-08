@@ -1,9 +1,9 @@
 import webapp2
 
-config = {'default-group': 'base-data'}
+config = {'default-group': 'base-data', 'admin-group': 'admin', 'user-group': 'user'}
 
 app = webapp2.WSGIApplication([
     ('/', 'admin.Admin'),
-    ('/add', 'modify.Add'),
-    ('/edit', 'modify.Edit'),
+    ('/user/new', 'modify.Add'),
+    ('/user/edit', 'modify.Edit'),
 ], debug=True, config=config)

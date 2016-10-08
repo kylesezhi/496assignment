@@ -20,5 +20,5 @@ class Edit(base_page.BaseHandler):
     def get(self):
         card_key = ndb.Key(urlsafe=self.request.get('key'))
         card = card_key.get()
-        self.template_variables['card'] = card.returnDict()
+        self.template_variables['card'] = card.return_dict()
         self.render('edit.html')

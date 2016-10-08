@@ -1,12 +1,24 @@
 from google.appengine.ext import ndb
 
 
-class Card(ndb.Model):
-    name = ndb.StringProperty(required=True)
-    card_type = ndb.StringProperty(required=True)
-    signup_bonus = ndb.BooleanProperty(required=True)
-    points_url = ndb.StringProperty(required=True)
-    date_started = ndb.DateProperty(required=True)
+class User(ndb.Model):
+    first_name = ndb.StringProperty(required=True)
+    last_name = ndb.StringProperty(required=True)
+    email = ndb.StringProperty(required=True)
+    password = ndb.StringProperty(required=True)
+    classes = ndb.KeyProperty(repeated=True)
     
-    def returnDict(self):
-        return {'key': self.key.urlsafe(), 'name': self.name, 'card_type': self.card_type, 'signup_bonus': self.signup_bonus, 'points_url': self.points_url, 'date_started': self.date_started}
+    @classmethod
+    def query_users(cls, ancestor_key):
+        return cls.query(ancestor=ancestor_key)
+    
+    def return_dict(self):
+        return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email}
+
+    
+class LineEntry(ndb.Model):
+    created = ndb.DateTimeProperty(required=True)
+    user = ndb.KeyProperty(required=True)
+    
+class UserClass(ndb.Model):
+    name = ndb.StringProperty(required=True)
