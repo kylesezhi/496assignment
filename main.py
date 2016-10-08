@@ -7,4 +7,5 @@ app = webapp2.WSGIApplication([
     ('/user/new', 'modify.AddUser'),
     ('/class/new', 'modify.AddClass'),
     ('/user/edit', 'modify.EditUser'),
+    ('/lineentry/new', 'modify.AddLineEntry'),
 ], debug=True, config=config)

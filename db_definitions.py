@@ -21,6 +21,9 @@ class LineEntry(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     user = ndb.KeyProperty(required=True)
     
+    def return_dict(self):
+        return {'key': self.key.urlsafe(), 'user': self.user.urlsafe(), 'created': self.created }
+    
 class UserClass(ndb.Model):
     name = ndb.StringProperty(required=True)
     

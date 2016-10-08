@@ -5,11 +5,16 @@ import db_definitions
 from datetime import datetime
 
 
-class Admin(base_page.BaseHandler):        
+class Admin(base_page.BaseHandler):
     def render(self, page):
         self.template_variables['users'] = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
         self.template_variables['admins'] = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
-        # self.template_variables['classes'] = [x.return_dict() for x in db_definitions.UserClass.query(ancestor=ndb.Key(db_definitions.UserClass, self.app.config.get('default-group'))).fetch()]
+        self.template_variables['lineentries'] = []
+        lineentries = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).fetch()]
+        for line in lineentries:
+            d = next((item for item in self.template_variables['users'] if item["key"] == line['user']), None)
+            d['created'] = line['created']
+            self.template_variables['lineentries'].append(d)
         base_page.BaseHandler.render(self, page, self.template_variables)
         
     def get(self):
@@ -51,7 +56,15 @@ class Admin(base_page.BaseHandler):
                 user_class.put()
                 self.template_variables['message'] = 'Added ' + user_class.name + '.'
             self.render('admin.html')
-
+        elif action == 'add_line_entry': # TODO restrict multiple student addition to list
+            user_key = ndb.Key(urlsafe=self.request.get('key'))
+            user = user_key.get()
+            line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
+            line = db_definitions.LineEntry(parent=line_key)
+            line.user = user_key
+            line.put()
+            self.template_variables['message'] = 'Added ' + user.first_name + ' ' + user.last_name + ' to the line.'
+            self.render('admin.html')
         else:
             self.template_variables['message'] = action + ' is unknown.'
             self.render('admin.html')

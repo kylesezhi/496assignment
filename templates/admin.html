@@ -10,12 +10,10 @@
       {{ message }}
     </div>
     {% endif %}
-    <a class="btn btn-primary" href="user/new" role="button">+ Add User</a><br>
-    <a class="btn btn-primary" href="class/new" role="button">+ Add Class</a>
-    <div class="panel panel-default">
       <!-- Default panel contents -->
       <h2 class="panel-heading">Users Admin</h2>
-      
+      <a class="btn btn-primary" href="user/new" role="button">+ Add User</a><br>
+      <a class="btn btn-primary" href="class/new" role="button">+ Add Class</a>
       {% if users|length > 0 or admins|length > 0 %}
       <!-- Table -->
       <table class="table">
@@ -48,6 +46,14 @@
       {% else %}
       <h3>The database is empty.</h3>
       {% endif %}
-    </div>  
+      <h2 class="panel-heading">Waiting List</h2>
+      <a class="btn btn-primary" href="lineentry/new" role="button">+ Add Student</a><br>
+      {% if lineentries|length > 0 %}
+        {% for lineentry in lineentries %}
+          {{ lineentry.last_name }} <br>
+        {% endfor %}
+      {% else %}
+      There is no one in line.
+      {% endif %}
   </body>
 </html>
