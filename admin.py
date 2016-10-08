@@ -9,8 +9,7 @@ class Admin(base_page.BaseHandler):
     def render(self, page):
         self.template_variables['users'] = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
         self.template_variables['admins'] = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
-        self.template_variables['classes'] = [x.return_dict() for x in db_definitions.UserClass.query(ancestor=ndb.Key(db_definitions.UserClass, self.app.config.get('default-group'))).fetch()]
-        # print(self.template_variables['admins'])
+        # self.template_variables['classes'] = [x.return_dict() for x in db_definitions.UserClass.query(ancestor=ndb.Key(db_definitions.UserClass, self.app.config.get('default-group'))).fetch()]
         base_page.BaseHandler.render(self, page, self.template_variables)
         
     def get(self):
@@ -28,6 +27,8 @@ class Admin(base_page.BaseHandler):
                 user.last_name = self.request.get('last_name')
                 user.email = self.request.get('email')
                 user.password = self.request.get('password')
+                print(self.request.get_all('classes[]'))
+                user.classes = [ndb.Key(urlsafe=x) for x in self.request.get_all('classes[]')]
                 user.put()
                 self.template_variables['message'] = 'Added ' + user.first_name + ' ' + user.last_name + '.'
             self.render('admin.html')
