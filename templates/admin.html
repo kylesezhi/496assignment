@@ -10,12 +10,13 @@
       {{ message }}
     </div>
     {% endif %}
-    <a class="btn btn-primary" href="user/new" role="button">+ Add User</a>
+    <a class="btn btn-primary" href="user/new" role="button">+ Add User</a><br>
+    <a class="btn btn-primary" href="class/new" role="button">+ Add Class</a>
     <div class="panel panel-default">
       <!-- Default panel contents -->
-      <div class="panel-heading">Users Admin</div>
+      <h2 class="panel-heading">Users Admin</h2>
       
-      {% if users|length > 0 %}
+      {% if users|length > 0 or admins|length > 0 %}
       <!-- Table -->
       <table class="table">
         <thead>
@@ -25,12 +26,21 @@
           <th>Type</th>
           <th></th>
         </thead>
+        {% for admin in admins %}
+        <tbody>
+          <td>{{ admin.first_name }}</td>
+          <td>{{ admin.last_name }}</td>
+          <td>{{ admin.email }}</td>
+          <td>Teacher</td>
+          <td><a class="btn btn-primary" href="/user/edit?key={{ admin.key }}" role="button">Edit</a></td>
+        </tbody>
+        {% endfor %}
         {% for user in users %}
         <tbody>
           <td>{{ user.first_name }}</td>
           <td>{{ user.last_name }}</td>
           <td>{{ user.email }}</td>
-          <td>TODO</td>
+          <td>Student</td>
           <td><a class="btn btn-primary" href="/user/edit?key={{ user.key }}" role="button">Edit</a></td>
         </tbody>
         {% endfor %}

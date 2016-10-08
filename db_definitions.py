@@ -8,7 +8,7 @@ class User(ndb.Model):
     password = ndb.StringProperty(required=True)
     classes = ndb.KeyProperty(repeated=True)
     
-    @classmethod
+    @classmethod # TODO use somehow
     def query_users(cls, ancestor_key):
         return cls.query(ancestor=ancestor_key)
     
@@ -17,8 +17,11 @@ class User(ndb.Model):
 
     
 class LineEntry(ndb.Model):
-    created = ndb.DateTimeProperty(required=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
     user = ndb.KeyProperty(required=True)
     
 class UserClass(ndb.Model):
     name = ndb.StringProperty(required=True)
+    
+    def return_dict(self):
+        return {'key': self.key.urlsafe(), 'name': self.name}

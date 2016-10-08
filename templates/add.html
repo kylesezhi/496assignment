@@ -16,9 +16,12 @@
       <input type="email" name="email" required><br>
       Password:
       <input type="password" name="password" required><br>
-      <input type="radio" name="user_type" value="teacher" checked> Teacher 
-      <input type="radio" name="user_type" value="student"> Student <br>
-      <input type="checkbox" name="signup_bonus" value="signup_gotten"> Signup bonus has been received.<br>
+      <input type="radio" name="user_type" value="admin" checked> Teacher 
+      <input type="radio" name="user_type" value="user"> Student <br>
+      {% for class in classes %}
+      <input type="checkbox" name="classes[]" value="{{ class.key }}"> {{ class.name }} 
+      {% endfor %}
+      <br>
       <input class="btn btn-primary" type="submit" value="Save">
     </form>
   </body>

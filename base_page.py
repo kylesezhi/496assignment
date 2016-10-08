@@ -4,6 +4,10 @@ import jinja2
 
 
 class BaseHandler(webapp2.RequestHandler):
+    def __init__(self, request, response):
+        self.initialize(request, response)
+        self.template_variables = {}
+
     @webapp2.cached_property
     def jinja2(self):
         fp = os.path.dirname(__file__) + '/templates'
