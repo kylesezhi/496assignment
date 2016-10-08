@@ -32,7 +32,7 @@ class Admin(base_page.BaseHandler):
                 user.put()
                 self.template_variables['message'] = 'Added ' + user.first_name + ' ' + user.last_name + '.'
             self.render('admin.html')
-        elif action == 'edit_card':
+        elif action == 'edit_user':
             key = ndb.Key(urlsafe=self.request.get('key'))
             card = key.get()
             card.name = self.request.get('card_name')

@@ -2,26 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Edit Card</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>Edit User</title>
   </head>
   <body>
-    <!-- TODO http://bootsnipp.com/forms -->
-    <h1>Edit Card</h1>
+    <h1>Edit User</h1>
     <form action="/" method="post">
-      <input type="hidden" name="action" value="edit_card">
-      <input type="hidden" name="key" value="{{ card.key }}">
-      Card name:
-      <input type="text" name="card_name" value="{{ card.name }}" required><br>
-      <input type="radio" name="card_type" value="visa"{% if card.card_type == 'visa' %} checked{% endif %}> Visa 
-      <input type="radio" name="card_type" value="mastercard"{% if card.card_type == 'mastercard' %} checked{% endif %}> Mastercard
-      <input type="radio" name="card_type" value="amex"{% if card.card_type == 'amex' %} checked{% endif %}> American Express
-      <input type="radio" name="card_type" value="other"{% if card.card_type == 'other' %} checked{% endif %}> Other<br>
-      <input type="checkbox" name="signup_bonus" value="signup_gotten"> Signup bonus has been received.<br>
-      URL for points explanation:
-      <input type="text" name="points_url" value="{{ card.points_url }}" required><br>
-      Week started:
-      <input type="date" name="date_started" value="{{ card.date_started }}" required><br>
+      <input type="hidden" name="action" value="edit_user">
+      <input type="hidden" name="key" value="{{ user.key }}">
+      First name:
+      <input type="text" name="first_name" value="{{ user.first_name }}" required><br>
+      Last name:
+      <input type="text" name="last_name" value="{{ user.last_name }}" required><br>
+      E-mail:
+      <input type="email" name="email" value="{{ user.email }}" required><br>
+      <!-- Password:
+      <input type="password" name="password" value="{{ user.password }}" required><br> -->
+      <!-- <input type="radio" name="user_type" value="admin" checked> Teacher 
+      <input type="radio" name="user_type" value="user"> Student <br> -->
+      <fieldset>
+        <legend>Associated Classes</legend>
+      {% for class in classes %}
+      <input type="checkbox" name="classes[]" value="{{ class.key }}" {% if class.key in user.classes %}checked{% endif %}> {{ class.name }} 
+      {% endfor %}
+      </fieldset>
       <input class="btn btn-primary" type="submit" value="Save">
     </form>
   </body>

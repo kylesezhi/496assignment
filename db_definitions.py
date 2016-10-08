@@ -13,7 +13,8 @@ class User(ndb.Model):
         return cls.query(ancestor=ancestor_key)
     
     def return_dict(self):
-        return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email}
+        cs = [x.urlsafe() for x in self.classes]
+        return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email, 'classes': cs }
 
     
 class LineEntry(ndb.Model):
