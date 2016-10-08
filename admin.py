@@ -27,25 +27,19 @@ class Admin(base_page.BaseHandler):
                 user.last_name = self.request.get('last_name')
                 user.email = self.request.get('email')
                 user.password = self.request.get('password')
-                print(self.request.get_all('classes[]'))
                 user.classes = [ndb.Key(urlsafe=x) for x in self.request.get_all('classes[]')]
                 user.put()
                 self.template_variables['message'] = 'Added ' + user.first_name + ' ' + user.last_name + '.'
             self.render('admin.html')
         elif action == 'edit_user':
             key = ndb.Key(urlsafe=self.request.get('key'))
-            card = key.get()
-            card.name = self.request.get('card_name')
-            card.card_type = self.request.get('card_type')
-            if not self.request.get('signup_bonus'):
-                card.signup_bonus = False
-            else:
-                card.signup_bonus = True
-            card.points_url = self.request.get('points_url')
-            d = datetime.strptime(self.request.get('date_started'), '%Y-%m-%d')
-            card.date_started = d
-            card.put()
-            self.template_variables['message'] = 'Updated ' + card.name + '.'
+            user = key.get()
+            user.first_name = self.request.get('first_name')
+            user.last_name = self.request.get('last_name')
+            user.email = self.request.get('email')
+            user.classes = [ndb.Key(urlsafe=x) for x in self.request.get_all('classes[]')]
+            user.put()
+            self.template_variables['message'] = 'Updated ' + user.first_name + ' ' + user.last_name + '.'
             self.render('admin.html')
         elif action == 'add_class':
             if db_definitions.UserClass.query(db_definitions.UserClass.name == self.request.get('name')).fetch():
