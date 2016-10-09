@@ -24,7 +24,11 @@
       </tbody>
       {% endfor %}
       </table>
+      {% if not users %}
+      There are no students in the database. <br>
+      {% else %}
       <input class="btn btn-primary" type="submit" value="Save">
+      {% endif %}
     </form>
   </body>
 </html>

@@ -11,10 +11,12 @@ class Admin(base_page.BaseHandler):
         self.template_variables['admins'] = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
         self.template_variables['lineentries'] = []
         lineentries = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).fetch()]
-        for line in lineentries:
+        for line in lineentries: # TODO abstract out to helper function
             d = next((item for item in self.template_variables['users'] if item["key"] == line['user']), None)
             d['created'] = line['created']
             self.template_variables['lineentries'].append(d)
+        print('DEBUG')
+        print (lineentries)
         base_page.BaseHandler.render(self, page, self.template_variables)
         
     def get(self):
