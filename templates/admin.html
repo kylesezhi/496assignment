@@ -50,7 +50,7 @@
       <a class="btn btn-primary" href="lineentry/new" role="button">+ Add Student</a><br>
       {% if lineentries|length > 0 %}
         {% for lineentry in lineentries %}
-          {{ lineentry.last_name }} <br>
+          {{ lineentry.first_name }} {{ lineentry.last_name }}, added {{ lineentry.created }} <br>
         {% endfor %}
       {% else %}
       There is no one in line.
