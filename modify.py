@@ -34,6 +34,6 @@ class EditUser(base_page.BaseHandler):
         user_key = ndb.Key(urlsafe=self.request.get('key'))
         user = user_key.get()
         self.template_variables['user'] = user.return_dict()
-        print('DEBUG')
-        print(self.template_variables['user'])
+        # print('DEBUG')
+        # print(self.template_variables['user'])
         self.render('edit.html')

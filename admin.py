@@ -15,8 +15,8 @@ class Admin(base_page.BaseHandler):
             d = next((item for item in self.template_variables['users'] if item["key"] == line['user']), None)
             d['created'] = line['created']
             self.template_variables['lineentries'].append(d)
-        print('DEBUG')
-        print (lineentries)
+        # print('DEBUG')
+        # print (lineentries)
         base_page.BaseHandler.render(self, page, self.template_variables)
         
     def get(self):

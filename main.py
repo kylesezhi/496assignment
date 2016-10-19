@@ -8,6 +8,5 @@ app = webapp2.WSGIApplication([
     ('/class/new', 'modify.AddClass'),
     ('/user/edit', 'modify.EditUser'),
     ('/lineentry/new', 'modify.AddLineEntry'),
+    ('/api/user','api.User'),
 ], debug=True, config=config)
-app.router.add(webapp2.Route(r'/api/user','api.User'))
-app.router.add(webapp2.Route(r'/api/user/<id:[0-9]+><:/?>','api.User'))
