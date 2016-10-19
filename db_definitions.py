@@ -9,20 +9,24 @@ class User(ndb.Model):
     classes = ndb.KeyProperty(repeated=True)
     files = ndb.StringProperty(repeated=True)
     
-    @classmethod # TODO use somehow
-    def query_users(cls, ancestor_key):
-        return cls.query(ancestor=ancestor_key)
+    # @classmethod # TODO use somehow
+    # def query_users(cls, ancestor_key):
+        # return cls.query(ancestor=ancestor_key)
     
     def return_dict(self):
         cs = [x.urlsafe() for x in self.classes]
         return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email, 'classes': cs }
 
     
+class Message(ndb.Model):
+    message = ndb.StringProperty(required=True)
+    user = user = ndb.KeyProperty(required=True)
+    
 class LineEntry(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     user = ndb.KeyProperty(required=True)
-    problem = ndb.StringProperty(required=True)
-    messages = ndb.StringProperty(repeated=True)
+    # problem = ndb.StringProperty(required=True) # TODO
+    messages = ndb.StructuredProperty(Message, repeated=True)
     files = ndb.StringProperty(repeated=True)
     
     def return_dict(self):
