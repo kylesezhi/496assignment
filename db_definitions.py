@@ -7,6 +7,7 @@ class User(ndb.Model):
     email = ndb.StringProperty(required=True)
     password = ndb.StringProperty(required=True)
     classes = ndb.KeyProperty(repeated=True)
+    files = ndb.StringProperty(repeated=True)
     
     @classmethod # TODO use somehow
     def query_users(cls, ancestor_key):
@@ -20,6 +21,9 @@ class User(ndb.Model):
 class LineEntry(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     user = ndb.KeyProperty(required=True)
+    problem = ndb.StringProperty(required=True)
+    messages = ndb.StringProperty(repeated=True)
+    files = ndb.StringProperty(repeated=True)
     
     def return_dict(self):
         return {'key': self.key.urlsafe(), 'user': self.user.urlsafe(), 'created': self.created }
