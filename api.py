@@ -38,6 +38,11 @@ class User(webapp2.RequestHandler):
         self.response.write(json.dumps(out))
         return
         
+    def delete(self, **kwargs):
+        print('__DELETE__')
+        print kwargs['user']
+        return
+        
 class UserClass(webapp2.RequestHandler):
     def get(self):
         q = db_definitions.UserClass.query()

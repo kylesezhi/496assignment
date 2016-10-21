@@ -13,3 +13,4 @@ app = webapp2.WSGIApplication([
     ('/api/class','api.UserClass'),
 ], debug=True, config=config)
 app.router.add(webapp2.Route('/api/lineentry/user/<user:[0-9]+><:/?>','api.LineEntry'))
+app.router.add(webapp2.Route('/api/user/<user:[0-9]+><:/?>','api.User'))
