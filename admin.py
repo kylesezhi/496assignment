@@ -13,7 +13,8 @@ class Admin(base_page.BaseHandler):
         lineentries = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).fetch()]
         for line in lineentries: # TODO abstract out to helper function
             d = next((item for item in self.template_variables['users'] if item["key"] == line['user']), None)
-            d['created'] = line['created']
+            if d is not None: d['created'] = line['created']
+            # d['created'] = line['created'] # TODO
             self.template_variables['lineentries'].append(d)
         # print('DEBUG')
         # print (lineentries)
@@ -62,6 +63,7 @@ class Admin(base_page.BaseHandler):
             user_key = ndb.Key(urlsafe=self.request.get('key'))
             print("DEBUG")
             print(user_key)
+            # call here TODO
             user = user_key.get()
             line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
             line = db_definitions.LineEntry(parent=line_key)
