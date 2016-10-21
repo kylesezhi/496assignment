@@ -20,6 +20,7 @@ class User(webapp2.RequestHandler):
             email - required
             password - required
             user_type - required: 'admin' or 'user' TODO
+            classes
             """
         k = ndb.Key(db_definitions.User, self.app.config.get('admin-group'))
         u = db_definitions.User(parent=k)
@@ -37,6 +38,13 @@ class User(webapp2.RequestHandler):
         self.response.write(json.dumps(out))
         return
         
+class UserClass(webapp2.RequestHandler):
+    def get(self):
+        q = db_definitions.UserClass.query()
+        keys = q.fetch(keys_only = True)
+        results = {'ids': [x.id() for x in keys]}
+        self.response.write(json.dumps(results))
+
 class LineEntry(webapp2.RequestHandler):
     def get(self):
         q = db_definitions.LineEntry.query()
@@ -45,6 +53,36 @@ class LineEntry(webapp2.RequestHandler):
         self.response.write(json.dumps(results))
         return
         
+    def put(self, **kwargs):
+        # Creates LineEntry
+        
+        # POST variables:
+            # user = ndb.KeyProperty(required=True)
+            # problem = ndb.StringProperty(required=True) # TODO
+        
+        # GET KEY FROM ID
+        if 'user' in kwargs:
+            user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
+            print('__DEBUG__')
+            print user_key
+            
+            line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
+            line = db_definitions.LineEntry(parent=line_key)
+            line.user = user_key
+            line.put()
+            out = line.to_dict()
+            self.response.write(json.dumps(out))
+            return
+
+
+            # line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
+            # line = db_definitions.LineEntry(parent=line_key)
+            # line.user = user_key
+            # line.put()
+            # out = line.return_dict()
+            # self.response.write(json.dumps(out))
+        return
+
     def post(self):
         # Creates LineEntry
         
@@ -53,14 +91,15 @@ class LineEntry(webapp2.RequestHandler):
             # problem = ndb.StringProperty(required=True) # TODO
         
         # GET KEY FROM ID
-        user_id = self.request.get('user') # TODO this must be easier
-        q = db_definitions.User.query()
-        keys = q.fetch(keys_only = True)
-        user_key = ''
-        for key in keys:
-            if int(key.id()) == int(user_id):
-                user_key = key
-                break
+        user_key = ndb.Key(db_definitions.User, int(self.request.get('user')))
+        # user_id = self.request.get('user') # TODO this must be easier
+        # q = db_definitions.User.query()
+        # keys = q.fetch(keys_only = True)
+        # user_key = ''
+        # for key in keys:
+        #     if int(key.id()) == int(user_id):
+        #         user_key = key
+        #         break
         
         print('__DEBUG__')
         print user_key
