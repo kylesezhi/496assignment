@@ -41,6 +41,15 @@ class User(webapp2.RequestHandler):
     def delete(self, **kwargs):
         print('__DELETE__')
         print kwargs['user']
+        if 'user' in kwargs:
+            user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
+            admin_key = ndb.Key(db_definitions.User, self.app.config.get('admin-group'), db_definitions.User, int(kwargs['user']))
+            # print user_key
+            # user = user_key.get()
+            # TODO check for places in line!
+            user_key.delete()
+            admin_key.delete()
+            # print admin_key
         return
         
 class UserClass(webapp2.RequestHandler):

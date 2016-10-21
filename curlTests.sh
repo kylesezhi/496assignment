@@ -19,5 +19,5 @@
 # echo
 
 echo 'Delete user with DELETE -----------------------'
-curl -X DELETE http://localhost:8080/api/user/4572868859920384
+curl -X DELETE http://localhost:8080/api/user/5663034638860288
 echo
