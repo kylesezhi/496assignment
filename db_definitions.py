@@ -19,6 +19,7 @@ class User(ndb.Model):
 
     
 class Message(ndb.Model):
+    created = ndb.DateTimeProperty(auto_now_add=True)
     message = ndb.StringProperty(required=True)
     user = user = ndb.KeyProperty(required=True)
     
@@ -26,11 +27,11 @@ class LineEntry(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     user = ndb.KeyProperty(required=True)
     # problem = ndb.StringProperty(required=True) # TODO
-    messages = ndb.StructuredProperty(Message, repeated=True)
+    # messages = ndb.StructuredProperty(Message, repeated=True)
     files = ndb.StringProperty(repeated=True)
     
     def return_dict(self):
-        return {'key': self.key.urlsafe(), 'user': self.user.urlsafe(), 'created': self.created }
+        return {'key': self.key.urlsafe(), 'user': self.user.urlsafe(), 'created': self.created.strftime('%m/%d/%Y') }
     
 class UserClass(ndb.Model):
     name = ndb.StringProperty(required=True)

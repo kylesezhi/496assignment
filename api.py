@@ -51,10 +51,8 @@ class LineEntry(webapp2.RequestHandler):
         # POST variables:
             # user = ndb.KeyProperty(required=True)
             # problem = ndb.StringProperty(required=True) # TODO
-            # messages = ndb.StructuredProperty(Message, repeated=True)
-            # files = ndb.StringProperty(repeated=True)
         
-        # get the key from the id
+        # GET KEY FROM ID
         user_id = self.request.get('user') # TODO this must be easier
         q = db_definitions.User.query()
         keys = q.fetch(keys_only = True)
@@ -63,12 +61,17 @@ class LineEntry(webapp2.RequestHandler):
             if int(key.id()) == int(user_id):
                 user_key = key
                 break
-                
+        
+        print('__DEBUG__')
+        print user_key
+
         line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
         line = db_definitions.LineEntry(parent=line_key)
         line.user = user_key
         line.put()
-        return        
+        out = line.return_dict()
+        self.response.write(json.dumps(out))
+        return
                 
         # INTERNET IDEAS
         # user_id = int(self.request.get('user'))
