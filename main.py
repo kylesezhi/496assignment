@@ -9,4 +9,5 @@ app = webapp2.WSGIApplication([
     ('/user/edit', 'modify.EditUser'),
     ('/lineentry/new', 'modify.AddLineEntry'),
     ('/api/user','api.User'),
+    ('/api/lineentry','api.LineEntry'),
 ], debug=True, config=config)
