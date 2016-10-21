@@ -31,7 +31,7 @@ class LineEntry(ndb.Model):
     files = ndb.StringProperty(repeated=True)
     
     def return_dict(self):
-        return {'key': self.key.urlsafe(), 'user': self.user.urlsafe(), 'created': self.created.strftime('%m/%d/%Y') }
+        return {'key': self.key.urlsafe(), 'user': self.user.urlsafe(), 'created': self.created.strftime('%d/%m/%y %H:%M') }
     
 class UserClass(ndb.Model):
     name = ndb.StringProperty(required=True)
