@@ -1,7 +1,9 @@
+#!/usr/bin/python
+
 import requests
 from time import sleep
 
-HOST = 'http://localhost:8080'
+HOST = 'https://project-4-144319.appspot.com'
 
 print('List all user ids GET -----------------------')
 r = requests.get(HOST + '/api/user')

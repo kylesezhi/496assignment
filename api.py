@@ -44,19 +44,19 @@ class User(webapp2.RequestHandler):
     def delete(self, **kwargs):
         if 'user' in kwargs:
             user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
-            admin_key = ndb.Key(db_definitions.User, self.app.config.get('admin-group'), db_definitions.User, int(kwargs['user']))
+            # admin_key = ndb.Key(db_definitions.User, self.app.config.get('admin-group'), db_definitions.User, int(kwargs['user']))
 
             # REMOVE RELATED PLACE IN LINE
             lineentries = db_definitions.LineEntry.query()
             for lineentry in lineentries:
                 if lineentry.user == user_key:
                     lineentry.key.delete()
-                if lineentry.user == admin_key:
-                    lineentry.key.delete()
+                # if lineentry.user == admin_key:
+                #     lineentry.key.delete()
 
             # REMOVE USER
             user_key.delete()
-            admin_key.delete()
+            # admin_key.delete()
         return
         
 class UserClass(webapp2.RequestHandler):
