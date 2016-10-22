@@ -1,9 +1,9 @@
-# echo 'List all users GET -----------------------'
-# curl http://localhost:8080/api/user
-# echo
+echo 'List all user ids GET -----------------------'
+curl http://localhost:8080/api/user
+echo
 
 # echo 'Make new user -----------------------'
-# curl --data-urlencode "first_name=Burt" --data-urlencode "last_name=Reynolds" --data-urlencode "email=d@d.com" --data-urlencode "password=123" http://localhost:8080/api/user
+# curl --data-urlencode "first_name=Burt" --data-urlencode "last_name=Reynolds" --data-urlencode "email=d@d.com" --data-urlencode "password=123" --data-urlencode "user_type=user" http://localhost:8080/api/user
 # echo
 
 # echo 'List all line entries GET -----------------------'
@@ -19,5 +19,5 @@
 # echo
 
 echo 'Delete user with DELETE -----------------------'
-curl -X DELETE http://localhost:8080/api/user/5663034638860288
+curl -X DELETE http://localhost:8080/api/user/6366722080636928
 echo

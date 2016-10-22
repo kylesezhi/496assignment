@@ -22,7 +22,10 @@ class User(webapp2.RequestHandler):
             user_type - required: 'admin' or 'user' TODO
             classes
             """
-        k = ndb.Key(db_definitions.User, self.app.config.get('admin-group'))
+        if user_type == 'admin':
+            k = ndb.Key(db_definitions.User, self.app.config.get('admin-group'))
+        else:
+            k = ndb.Key(db_definitions.User, self.app.config.get('user-group'))
         u = db_definitions.User(parent=k)
 
         u.first_name = self.request.get('first_name', default_value=None)
@@ -44,9 +47,16 @@ class User(webapp2.RequestHandler):
         if 'user' in kwargs:
             user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
             admin_key = ndb.Key(db_definitions.User, self.app.config.get('admin-group'), db_definitions.User, int(kwargs['user']))
-            # print user_key
-            # user = user_key.get()
-            # TODO check for places in line!
+
+            # REMOVE RELATED PLACE IN LINE
+            lineentries = db_definitions.LineEntry.query()
+            for lineentry in lineentries:
+                if lineentry.user == user_key:
+                    lineentry.key.delete()
+                if lineentry.user == admin_key:
+                    lineentry.key.delete()
+
+            # REMOVE USER
             user_key.delete()
             admin_key.delete()
             # print admin_key
