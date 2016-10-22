@@ -11,9 +11,10 @@
     </div>
     {% endif %}
       <!-- Default panel contents -->
+      <a href="{{ logout_url }}">Logout</a>
       <h2 class="panel-heading">Waiting List Admin</h2>
-      <a class="btn btn-primary" href="user/new" role="button">+ Add User</a><br>
-      <a class="btn btn-primary" href="class/new" role="button">+ Add Class</a>
+      <a class="btn btn-primary" href="admin/user/new" role="button">+ Add User</a><br>
+      <a class="btn btn-primary" href="admin/class/new" role="button">+ Add Class</a>
       {% if users|length > 0 or admins|length > 0 %}
       <!-- Table -->
       <table class="table">
@@ -39,7 +40,7 @@
           <td>{{ user.last_name }}</td>
           <td>{{ user.email }}</td>
           <td>Student</td>
-          <td><a class="btn btn-primary" href="/user/edit?key={{ user.key }}" role="button">Edit</a></td>
+          <td><a class="btn btn-primary" href="admin/user/edit?key={{ user.key }}" role="button">Edit</a></td>
         </tbody>
         {% endfor %}
       </table>
@@ -47,7 +48,7 @@
       <h3>The database is empty.</h3>
       {% endif %}
       <h2 class="panel-heading">Waiting List</h2>
-      <a class="btn btn-primary" href="lineentry/new" role="button">+ Add Student</a><br>
+      <a class="btn btn-primary" href="admin/lineentry/new" role="button">+ Add Student</a><br>
       {% if lineentries|length > 0 %}
         {% for lineentry in lineentries %}
           {{ lineentry.first_name }} {{ lineentry.last_name }}, added {{ lineentry.created }} <br>

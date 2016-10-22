@@ -1,12 +1,14 @@
 import webapp2
 import base_page
 from google.appengine.ext import ndb
+from google.appengine.api import users
 import db_definitions
 from datetime import datetime
 
 
 class Admin(base_page.BaseHandler):
     def render(self, page):
+        self.template_variables['logout_url'] = users.create_logout_url('/')
         self.template_variables['users'] = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
         self.template_variables['admins'] = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
         self.template_variables['lineentries'] = []
@@ -16,8 +18,6 @@ class Admin(base_page.BaseHandler):
             if d is not None: d['created'] = line['created']
             # d['created'] = line['created']
             self.template_variables['lineentries'].append(d)
-        # print('DEBUG')
-        # print (lineentries)
         base_page.BaseHandler.render(self, page, self.template_variables)
         
     def get(self):
