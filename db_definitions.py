@@ -18,6 +18,16 @@ class User(Model):
     # def query_users(cls, ancestor_key):
         # return cls.query(ancestor=ancestor_key)
     
+    def to_dict(self):
+        d = super(User, self).to_dict()
+        d['classes'] = []
+        d['files'] = []
+        for c in self.classes:
+            d['classes'].append(c.id())
+        for f in self.files:
+            d['files'].append(f.id())
+        return d
+
     def return_dict(self):
         cs = [x.urlsafe() for x in self.classes]
         return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email, 'classes': cs }

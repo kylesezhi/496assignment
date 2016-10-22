@@ -22,12 +22,12 @@ class User(webapp2.RequestHandler):
             user_type - required: 'admin' or 'user' TODO
             classes
             """
-        if user_type == 'admin':
+        if self.request.get('user_type', default_value=None) == 'admin':
             k = ndb.Key(db_definitions.User, self.app.config.get('admin-group'))
         else:
             k = ndb.Key(db_definitions.User, self.app.config.get('user-group'))
-        u = db_definitions.User(parent=k)
 
+        u = db_definitions.User(parent=k)
         u.first_name = self.request.get('first_name', default_value=None)
         u.last_name = self.request.get('last_name', default_value=None)
         u.email = self.request.get('email', default_value=None)
@@ -37,23 +37,27 @@ class User(webapp2.RequestHandler):
             self.response.message = "Invalid request. Must provide all info for new user."
             return
         key = u.put()
-        out = u.return_dict()
+        out = u.to_dict()
         self.response.write(json.dumps(out))
         return
         
     def delete(self, **kwargs):
-        print('__DELETE__')
-        print kwargs['user']
         if 'user' in kwargs:
             user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
             admin_key = ndb.Key(db_definitions.User, self.app.config.get('admin-group'), db_definitions.User, int(kwargs['user']))
 
             # REMOVE RELATED PLACE IN LINE
+            print('___LOOK___')
             lineentries = db_definitions.LineEntry.query()
+            # print lineentries
             for lineentry in lineentries:
+                print lineentry.user
+                print user_key
                 if lineentry.user == user_key:
+                    print('__DELETE__')
                     lineentry.key.delete()
                 if lineentry.user == admin_key:
+                    print('__DELETE__')
                     lineentry.key.delete()
 
             # REMOVE USER
