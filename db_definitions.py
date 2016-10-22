@@ -33,10 +33,10 @@ class User(Model):
         return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email, 'classes': cs }
 
     
-class Message(Model):
-    created = ndb.DateTimeProperty(auto_now_add=True)
-    message = ndb.StringProperty(required=True)
-    user = user = ndb.KeyProperty(required=True)
+# class Message(Model):
+#     created = ndb.DateTimeProperty(auto_now_add=True)
+#     message = ndb.StringProperty(required=True)
+#     user = user = ndb.KeyProperty(required=True)
     
 class LineEntry(Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -44,6 +44,7 @@ class LineEntry(Model):
     # problem = ndb.StringProperty(required=True) # TODO
     # messages = ndb.StructuredProperty(Message, repeated=True)
     files = ndb.StringProperty(repeated=True)
+    # finished = ndb.BooleanProperty(required=True)
     
     def to_dict(self):
         d = super(LineEntry, self).to_dict()
