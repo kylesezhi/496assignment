@@ -5,11 +5,17 @@ import json
 from datetime import datetime
 
 class User(webapp2.RequestHandler):
-    def get(self):
-        q = db_definitions.User.query()
-        keys = q.fetch(keys_only = True)
-        results = {'ids': [x.id() for x in keys]}
-        self.response.write(json.dumps(results))
+    def get(self, **kwargs):
+        if 'user' in kwargs:
+            user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
+            user = user_key.get()
+            out = user.return_dict()
+            self.response.write(json.dumps(out))
+        else:
+            q = db_definitions.User.query()
+            keys = q.fetch(keys_only = True)
+            results = {'ids': [x.id() for x in keys]}
+            self.response.write(json.dumps(results))
         
     def post(self):
         """ Creates User
