@@ -73,12 +73,21 @@ class UserClass(webapp2.RequestHandler):
         self.response.write(json.dumps(results))
 
 class LineEntry(webapp2.RequestHandler):
-    def get(self):
-        q = db_definitions.LineEntry.query()
-        keys = q.fetch(keys_only = True)
-        results = {'ids': [x.id() for x in keys]}
-        self.response.write(json.dumps(results))
-        return
+    def get(self, **kwargs):
+        if 'lineentry' in kwargs:
+            line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'), db_definitions.LineEntry, int(kwargs['lineentry']))
+            line = line_key.get()
+            created = line.return_dict()['created']
+            user = line.user.get()
+            out = user.return_dict()
+            out['created'] = created
+            self.response.write(json.dumps(out))
+        else:
+            q = db_definitions.LineEntry.query()
+            keys = q.fetch(keys_only = True)
+            results = {'ids': [x.id() for x in keys]}
+            self.response.write(json.dumps(results))
+            return
         
     def put(self, **kwargs):
         # Creates LineEntry
@@ -90,8 +99,8 @@ class LineEntry(webapp2.RequestHandler):
         # GET KEY FROM ID
         if 'user' in kwargs:
             user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
-            print('__DEBUG__')
-            print user_key
+            # print('__DEBUG__')
+            # print user_key
             
             line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
             line = db_definitions.LineEntry(parent=line_key)
@@ -120,8 +129,8 @@ class LineEntry(webapp2.RequestHandler):
         # GET KEY FROM ID
         user_key = ndb.Key(db_definitions.User, int(self.request.get('user')))
         
-        print('__DEBUG__')
-        print user_key
+        # print('__DEBUG__')
+        # print user_key
 
         line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
         line = db_definitions.LineEntry(parent=line_key)
