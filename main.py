@@ -9,9 +9,9 @@ app = webapp2.WSGIApplication([
     ('/admin/class/new', 'modify.AddClass'),
     ('/admin/user/edit', 'modify.EditUser'),
     ('/admin/lineentry/new', 'modify.AddLineEntry'),
-    ('/admin/api/user','api.User'),
-    ('/admin/api/lineentry','api.LineEntry'),
-    ('/admin/api/class','api.UserClass'),
+    ('/api/user','api.User'),
+    ('/api/lineentry','api.LineEntry'),
+    ('/api/class','api.UserClass'),
 ], debug=True, config=config)
 app.router.add(webapp2.Route('/admin/api/lineentry/<lineentry:[0-9]+><:/?>','api.LineEntry'))
 app.router.add(webapp2.Route('/admin/api/user/<user:[0-9]+><:/?>','api.User'))
