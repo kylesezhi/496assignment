@@ -1,6 +1,6 @@
 import webapp2
 
-config = {'default-group': 'base-data', 'admin-group': 'admin', 'user-group': 'user', 'app-secret': 'lskjdfalskdjfadks'}
+config = {'default-group': 'base-data', 'admin-group': 'admin', 'user-group': 'user'}
 
 app = webapp2.WSGIApplication([
     ('/', 'login.Login'),

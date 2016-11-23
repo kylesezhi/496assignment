@@ -148,6 +148,6 @@ class Login(webapp2.RequestHandler):
         d = next((item for item in admins if item["password"] == pwd), None)
         if d is not None:
             print "OK JOSE"
-            response['secret'] = self.app.config.get('app-secret')
+            response['token'] = d['key']
         self.response.write(json.dumps(response))
         return

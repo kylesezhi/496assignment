@@ -33,7 +33,7 @@ class User(Model):
         return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email, 'classes': cs }
         
     def emailAndPass(self):
-        return {'email': self.email, 'password': self.password }
+        return {'email': self.email, 'password': self.password, 'key': self.key.urlsafe() }
 
     
 # class Message(Model):
