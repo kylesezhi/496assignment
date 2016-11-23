@@ -6,11 +6,13 @@ from datetime import datetime
 
 class User(webapp2.RequestHandler):
     def get(self, **kwargs):
+        # we want a specific student
         if 'user' in kwargs:
             user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
             user = user_key.get()
             out = user.return_dict()
             self.response.write(json.dumps(out))
+        # loop over all users
         else:
             q = db_definitions.User.query()
             keys = q.fetch(keys_only = True)
@@ -109,14 +111,6 @@ class LineEntry(webapp2.RequestHandler):
             out = line.to_dict()
             self.response.write(json.dumps(out))
             return
-
-
-            # line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
-            # line = db_definitions.LineEntry(parent=line_key)
-            # line.user = user_key
-            # line.put()
-            # out = line.return_dict()
-            # self.response.write(json.dumps(out))
         return
 
     def post(self):
@@ -139,5 +133,21 @@ class LineEntry(webapp2.RequestHandler):
         out = line.return_dict()
         self.response.write(json.dumps(out))
         return
+
+class Login(webapp2.RequestHandler):
+    def post(self):
+        """ Authenticates User
         
-        
+        POST variables:
+            email - required
+            password - required
+            """
+        pwd = self.request.get('password', default_value=None)
+        admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
+        response = {}
+        d = next((item for item in admins if item["password"] == pwd), None)
+        if d is not None:
+            print "OK JOSE"
+            response['secret'] = self.app.config.get('app-secret')
+        self.response.write(json.dumps(response))
+        return

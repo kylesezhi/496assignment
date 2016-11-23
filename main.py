@@ -1,6 +1,6 @@
 import webapp2
 
-config = {'default-group': 'base-data', 'admin-group': 'admin', 'user-group': 'user'}
+config = {'default-group': 'base-data', 'admin-group': 'admin', 'user-group': 'user', 'app-secret': 'lskjdfalskdjfadks'}
 
 app = webapp2.WSGIApplication([
     ('/', 'login.Login'),
@@ -12,6 +12,7 @@ app = webapp2.WSGIApplication([
     ('/api/user','api.User'),
     ('/api/lineentry','api.LineEntry'),
     ('/api/class','api.UserClass'),
+    ('/api/login','api.Login') # login to API
 ], debug=True, config=config)
-app.router.add(webapp2.Route('/admin/api/lineentry/<lineentry:[0-9]+><:/?>','api.LineEntry'))
-app.router.add(webapp2.Route('/admin/api/user/<user:[0-9]+><:/?>','api.User'))
+app.router.add(webapp2.Route('/api/lineentry/<lineentry:[0-9]+><:/?>','api.LineEntry'))
+app.router.add(webapp2.Route('/api/user/<user:[0-9]+><:/?>','api.User'))

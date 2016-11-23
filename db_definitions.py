@@ -31,6 +31,9 @@ class User(Model):
     def return_dict(self):
         cs = [x.urlsafe() for x in self.classes]
         return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email, 'classes': cs }
+        
+    def emailAndPass(self):
+        return {'email': self.email, 'password': self.password }
 
     
 # class Message(Model):
