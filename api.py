@@ -6,11 +6,11 @@ from datetime import datetime
 
 
 class Auth(webapp2.RequestHandler):
-    def checkAdminToken(self, email, key):
-        admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
+    def checkToken(self, key, usertype):
+        admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get(usertype + '-group'))).fetch()]
         d = next((item for item in admins if item["key"] == key), None)
-        if d is not None:
-            if email == d['email']: return True
+        if d is not None: return True
+            # if email == d['email']: return True
         return False
 
 class User(webapp2.RequestHandler):
@@ -36,10 +36,9 @@ class User(webapp2.RequestHandler):
             last_name - required
             email - required
             password - required
-            user_type - required: 'admin' or 'user' TODO
-            classes
+            user_type - required: 'admin' or 'user'
+            classes - optional
             """
-        # if self.request.get('token', default_value=None) == 
         if self.request.get('user_type', default_value=None) == 'admin':
             k = ndb.Key(db_definitions.User, self.app.config.get('admin-group'))
         else:
@@ -86,7 +85,7 @@ class UserClass(webapp2.RequestHandler):
 
 class LineEntry(webapp2.RequestHandler):
     def get(self, **kwargs):
-        if 'lineentry' in kwargs:
+        if 'lineentry' in kwargs: # specific line entry
             line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'), db_definitions.LineEntry, int(kwargs['lineentry']))
             line = line_key.get()
             created = line.return_dict()['created']
@@ -94,7 +93,7 @@ class LineEntry(webapp2.RequestHandler):
             out = user.return_dict()
             out['created'] = created
             self.response.write(json.dumps(out))
-        else:
+        else: # return all line entries
             q = db_definitions.LineEntry.query()
             keys = q.fetch(keys_only = True)
             results = {'ids': [x.id() for x in keys]}
@@ -103,10 +102,6 @@ class LineEntry(webapp2.RequestHandler):
         
     def put(self, **kwargs):
         # Creates LineEntry
-        
-        # POST variables:
-            # user = ndb.KeyProperty(required=True)
-            # problem = ndb.StringProperty(required=True) # TODO
         
         # GET KEY FROM ID
         if 'user' in kwargs:
@@ -129,12 +124,24 @@ class LineEntry(webapp2.RequestHandler):
         # POST variables:
             # user = ndb.KeyProperty(required=True)
             # problem = ndb.StringProperty(required=True) # TODO
+            # email = an admin email
+            # token = an admin token
         
         # GET KEY FROM ID
+        # print "DEBUG"
+        token = self.request.get('token', default_value=None)
+        # print self.request.get('user', default_value=None)
+        if not Auth().checkToken(token, 'admin'):
+            self.response.set_status(403, "Forbidden. Must be an admin.")
+            self.response.write(self.response.status)
         user_key = ndb.Key(db_definitions.User, int(self.request.get('user')))
         
-        # print('__DEBUG__')
-        # print user_key
+        # PREVENT MULTIPLE ENTRIES FOR STUDENT
+        # users = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
+        # d = next((item for item in users if item["key"] == self.request.get('user')), None)
+        # if d is not None:
+        #     self.response.set_status(400, "Bad request. User is already in line.")
+        #     self.response.write(self.response.status)
 
         line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
         line = db_definitions.LineEntry(parent=line_key)
@@ -160,8 +167,5 @@ class Login(Auth):
         if d is not None:
             if email == d['email']: response['token'] = d['key']
         self.response.write(json.dumps(response))
-        # print "TEST AUTHCHECK " + str(response)
-        # print Auth().checkToken(email, response['token'])
-        # if checkToken(email, d['key']):
-            # print "OK DUDE"
+        # print Auth().checkToken(email, response['token'], 'admin')
         return

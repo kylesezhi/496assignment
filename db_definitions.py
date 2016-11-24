@@ -30,10 +30,10 @@ class User(Model):
 
     def return_dict(self):
         cs = [x.urlsafe() for x in self.classes]
-        return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email, 'classes': cs }
+        return {'key': self.key.urlsafe(), 'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email, 'classes': cs, 'id': self.key.id() }
         
     def emailAndPass(self):
-        return {'email': self.email, 'password': self.password, 'key': self.key.urlsafe() }
+        return {'email': self.email, 'password': self.password, 'key': self.key.urlsafe(), 'id': self.key.id() }
 
     
 # class Message(Model):

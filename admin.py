@@ -59,11 +59,10 @@ class Admin(base_page.BaseHandler):
                 user_class.put()
                 self.template_variables['message'] = 'Added ' + user_class.name + '.'
             self.render('admin.html')
-        elif action == 'add_line_entry': # TODO restrict multiple student addition to list
+        elif action == 'add_line_entry':
             user_key = ndb.Key(urlsafe=self.request.get('key'))
-            # print("DEBUG")
-            # print(user_key)
-            # call here TODO
+            # TODO restrict multiple student addition to list
+            # PREVENT MULTIPLE ENTRIES FOR STUDENT
             user = user_key.get()
             line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
             line = db_definitions.LineEntry(parent=line_key)
