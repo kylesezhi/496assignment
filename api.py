@@ -4,6 +4,15 @@ import db_definitions
 import json
 from datetime import datetime
 
+
+class Auth(webapp2.RequestHandler):
+    def checkAdminToken(self, email, key):
+        admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
+        d = next((item for item in admins if item["key"] == key), None)
+        if d is not None:
+            if email == d['email']: return True
+        return False
+
 class User(webapp2.RequestHandler):
     def get(self, **kwargs):
         # we want a specific student
@@ -30,6 +39,7 @@ class User(webapp2.RequestHandler):
             user_type - required: 'admin' or 'user' TODO
             classes
             """
+        # if self.request.get('token', default_value=None) == 
         if self.request.get('user_type', default_value=None) == 'admin':
             k = ndb.Key(db_definitions.User, self.app.config.get('admin-group'))
         else:
@@ -134,7 +144,7 @@ class LineEntry(webapp2.RequestHandler):
         self.response.write(json.dumps(out))
         return
 
-class Login(webapp2.RequestHandler):
+class Login(Auth):
     def post(self):
         """ Authenticates User
         
@@ -143,11 +153,15 @@ class Login(webapp2.RequestHandler):
             password - required
             """
         pwd = self.request.get('password', default_value=None)
+        email = self.request.get('email', default_value=None)
         admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
         response = {}
         d = next((item for item in admins if item["password"] == pwd), None)
         if d is not None:
-            print "OK JOSE"
-            response['token'] = d['key']
+            if email == d['email']: response['token'] = d['key']
         self.response.write(json.dumps(response))
+        # print "TEST AUTHCHECK " + str(response)
+        # print Auth().checkToken(email, response['token'])
+        # if checkToken(email, d['key']):
+            # print "OK DUDE"
         return
