@@ -34,6 +34,9 @@ class User(Model):
         
     def emailAndPass(self):
         return {'email': self.email, 'password': self.password, 'key': self.key.urlsafe(), 'id': self.key.id() }
+        
+    def userData(self):
+        return {'email': self.email, 'first_name': self.first_name, 'last_name': self.last_name, 'id': self.key.id() }
 
     
 # class Message(Model):

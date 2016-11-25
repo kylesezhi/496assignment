@@ -23,10 +23,15 @@ class User(webapp2.RequestHandler):
             self.response.write(json.dumps(out))
         # loop over all users
         else:
-            q = db_definitions.User.query()
-            keys = q.fetch(keys_only = True)
-            results = {'ids': [x.id() for x in keys]}
-            self.response.write(json.dumps(results))
+            users = [x.userData() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
+            admins = [x.userData() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
+            for user in users: user['user_type'] = 'user'
+            for admin in admins: admin['user_type'] = 'admin'
+            
+            # q = db_definitions.User.query()
+            # keys = q.fetch(keys_only = True)
+            # results = {'ids': [x.id() for x in keys]}
+            self.response.write(json.dumps(users + admins))
         
     def post(self):
         """ Creates User
@@ -153,7 +158,7 @@ class LineEntry(webapp2.RequestHandler):
 
 class Login(Auth):
     def post(self):
-        """ Authenticates User
+        """ Authenticates User (ADMIN ONLY)
         
         POST variables:
             email - required
@@ -161,6 +166,9 @@ class Login(Auth):
             """
         pwd = self.request.get('password', default_value=None)
         email = self.request.get('email', default_value=None)
+        print "DEBUGzzz"
+        print pwd
+        print email
         admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
         response = {}
         d = next((item for item in admins if item["password"] == pwd), None)
