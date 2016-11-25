@@ -99,10 +99,16 @@ class LineEntry(webapp2.RequestHandler):
             out['created'] = created
             self.response.write(json.dumps(out))
         else: # return all line entries
-            q = db_definitions.LineEntry.query()
-            keys = q.fetch(keys_only = True)
-            results = {'ids': [x.id() for x in keys]}
-            self.response.write(json.dumps(results))
+            lines = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).fetch()]
+            users = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
+            print lines
+            for line in lines:
+                if 'key' in line: del line['key']
+                d = next((user for user in users if user["key"] == line['user']), None)
+                line['username'] = d['first_name'] + ' ' + d['last_name']
+                if 'user' in line: del line['user']
+            print lines
+            self.response.write(json.dumps(lines))
             return
         
     def put(self, **kwargs):

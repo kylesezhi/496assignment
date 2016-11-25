@@ -59,7 +59,7 @@ class LineEntry(Model):
         return d
     
     def return_dict(self):
-        return {'key': self.key.urlsafe(), 'user': self.user.urlsafe(), 'created': self.created.strftime('%d/%m/%y %H:%M.%S') }
+        return {'key': self.key.urlsafe(), 'user': self.user.urlsafe(), 'created': self.created.strftime('%d/%m/%y %H:%M.%S'), 'id': self.key.id() }
     
 class UserClass(Model):
     name = ndb.StringProperty(required=True)
