@@ -177,9 +177,11 @@ class Login(Auth):
         print email
         admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
         response = {}
-        d = next((item for item in admins if item["password"] == pwd), None)
+        print admins
+        d = next((item for item in admins if item["email"] == email), None)
         if d is not None:
-            if email == d['email']: response['token'] = d['key']
+            if pwd == d['password']: response['token'] = d['key']
+        print response
         self.response.write(json.dumps(response))
         # print Auth().checkToken(email, response['token'], 'admin')
         return
