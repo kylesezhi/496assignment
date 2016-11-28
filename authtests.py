@@ -11,7 +11,7 @@ r = requests.post(HOST + '/api/login', params=payload)
 print r.json()
 
 print('Valid Login POST -----------------------')
-payload = {'email': 'admin@gmail.com', 'password': '1'}
+payload = {'email': 'kyle.bedell@gmail.com', 'password': '1'}
 r = requests.post(HOST + '/api/login', params=payload)
 token = r.json()['token']
 print token

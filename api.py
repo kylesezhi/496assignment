@@ -6,11 +6,11 @@ from datetime import datetime
 
 
 class Auth(webapp2.RequestHandler):
+    # USES key AND usertype TO TELL IF THAT USER EXISTS
     def checkToken(self, key, usertype):
-        admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get(usertype + '-group'))).fetch()]
-        d = next((item for item in admins if item["key"] == key), None)
+        users = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get(usertype + '-group'))).fetch()]
+        d = next((item for item in users if item["key"] == key), None)
         if d is not None: return True
-            # if email == d['email']: return True
         return False
 
 class User(webapp2.RequestHandler):
@@ -138,10 +138,8 @@ class LineEntry(webapp2.RequestHandler):
             # email = an admin email
             # token = an admin token
         
-        # GET KEY FROM ID
-        # print "DEBUG"
+        # AUTHENTICATE FOR ADMIN ONLY
         token = self.request.get('token', default_value=None)
-        # print self.request.get('user', default_value=None)
         if not Auth().checkToken(token, 'admin'):
             self.response.set_status(403, "Forbidden. Must be an admin.")
             self.response.write(self.response.status)
@@ -180,7 +178,9 @@ class Login(Auth):
         print admins
         d = next((item for item in admins if item["email"] == email), None)
         if d is not None:
-            if pwd == d['password']: response['token'] = d['key']
+            if pwd == d['password']: 
+                response['token'] = d['key']
+                response['id'] = d['id']
         print response
         self.response.write(json.dumps(response))
         # print Auth().checkToken(email, response['token'], 'admin')
