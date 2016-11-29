@@ -50,24 +50,42 @@ class User(webapp2.RequestHandler):
             user_type - required: 'admin' or 'user'
             classes - optional
             """
-        if self.request.get('user_type', default_value=None) == 'admin':
-            k = ndb.Key(db_definitions.User, self.app.config.get('admin-group'))
-        else:
-            k = ndb.Key(db_definitions.User, self.app.config.get('user-group'))
+        if self.request.get('token', default_value=None) == None:
+            if self.request.get('user_type', default_value=None) == 'admin':
+                k = ndb.Key(db_definitions.User, self.app.config.get('admin-group'))
+            else:
+                k = ndb.Key(db_definitions.User, self.app.config.get('user-group'))
 
-        u = db_definitions.User(parent=k)
-        u.first_name = self.request.get('first_name', default_value=None)
-        u.last_name = self.request.get('last_name', default_value=None)
-        u.email = self.request.get('email', default_value=None)
-        u.password = self.request.get('password', default_value=None)
-        if None in (u.first_name, u.last_name, u.email, u.password):
-            self.response.status = 400
-            self.response.message = "Invalid request. Must provide all info for new user."
+            u = db_definitions.User(parent=k)
+            u.first_name = self.request.get('first_name', default_value=None)
+            u.last_name = self.request.get('last_name', default_value=None)
+            u.email = self.request.get('email', default_value=None)
+            u.password = self.request.get('password', default_value=None)
+            if None in (u.first_name, u.last_name, u.email, u.password):
+                self.response.status = 400
+                self.response.message = "Invalid request. Must provide all info for new user."
+                return
+            key = u.put()
+            out = u.to_dict()
+            self.response.write(json.dumps(out))
             return
-        key = u.put()
-        out = u.to_dict()
-        self.response.write(json.dumps(out))
-        return
+        else:
+            """ Updates Admin User
+            
+            POST variables:
+                first_name - required
+                last_name - required
+                email - required
+                token - required
+                """
+
+            key = ndb.Key(urlsafe=self.request.get('token'))
+            user = key.get()
+            user.first_name = self.request.get('first_name')
+            user.last_name = self.request.get('last_name')
+            user.email = self.request.get('email')
+            user.put()
+            return
         
     def delete(self, **kwargs):
         if 'user' in kwargs:
