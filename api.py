@@ -15,12 +15,18 @@ class Auth(webapp2.RequestHandler):
 
 class User(webapp2.RequestHandler):
     def get(self, **kwargs):
-        # we want a specific student
+        # we want a specific admin or user
         if 'user' in kwargs:
-            user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
-            user = user_key.get()
-            out = user.return_dict()
-            self.response.write(json.dumps(out))
+            users = [x.userData() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
+            admins = [x.userData() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
+            for user in users: user['user_type'] = 'user'
+            for admin in admins: admin['user_type'] = 'admin'
+            response = admins + users
+            for x in response:
+                if x['id'] == int(kwargs['user']):
+                    response = x
+                    break
+            self.response.write(json.dumps(response))
         # loop over all users
         else:
             users = [x.userData() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
