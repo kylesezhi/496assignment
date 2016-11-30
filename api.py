@@ -142,8 +142,6 @@ class LineEntry(webapp2.RequestHandler):
         # GET KEY FROM ID
         if 'user' in kwargs:
             user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
-            # print('__DEBUG__')
-            # print user_key
             
             line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
             line = db_definitions.LineEntry(parent=line_key)
@@ -169,10 +167,6 @@ class LineEntry(webapp2.RequestHandler):
 
         users = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
         d = next((item for item in users if item["id"] == int(self.request.get('user'))), None)
-        print "-------------- DEBUGZ ===------------"
-        print d
-        print self.request.get('user')
-        # user_key = ndb.Key(db_definitions.User, d['key'])
         user_key = ndb.Key(urlsafe=d['key'])
         
         # PREVENT MULTIPLE ENTRIES FOR STUDENT
