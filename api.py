@@ -125,6 +125,7 @@ class LineEntry(webapp2.RequestHandler):
         else: # return all line entries
             lines = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).fetch()]
             users = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
+            print "LOLZZZ"
             print lines
             for line in lines:
                 if 'key' in line: del line['key']
@@ -157,9 +158,7 @@ class LineEntry(webapp2.RequestHandler):
         # Creates LineEntry
         
         # POST variables:
-            # user = ndb.KeyProperty(required=True)
-            # problem = ndb.StringProperty(required=True) # TODO
-            # email = an admin email
+            # user = (id) ndb.KeyProperty(required=True)
             # token = an admin token
         
         # AUTHENTICATE FOR ADMIN ONLY
@@ -167,7 +166,14 @@ class LineEntry(webapp2.RequestHandler):
         if not Auth().checkToken(token, 'admin'):
             self.response.set_status(403, "Forbidden. Must be an admin.")
             self.response.write(self.response.status)
-        user_key = ndb.Key(db_definitions.User, int(self.request.get('user')))
+
+        users = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
+        d = next((item for item in users if item["id"] == int(self.request.get('user'))), None)
+        print "-------------- DEBUGZ ===------------"
+        print d
+        print self.request.get('user')
+        # user_key = ndb.Key(db_definitions.User, d['key'])
+        user_key = ndb.Key(urlsafe=d['key'])
         
         # PREVENT MULTIPLE ENTRIES FOR STUDENT
         # users = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
