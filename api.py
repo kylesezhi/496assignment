@@ -186,7 +186,7 @@ class LineEntry(webapp2.RequestHandler):
 
 class Login(Auth):
     def post(self):
-        """ Authenticates User (ADMIN ONLY)
+        """ Authenticates User
         
         POST variables:
             email - required
@@ -195,16 +195,22 @@ class Login(Auth):
         pwd = self.request.get('password', default_value=None)
         email = self.request.get('email', default_value=None)
         print "DEBUGzzz"
-        print pwd
-        print email
+        # print pwd
+        # print email
         admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
+        users = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
+        for user in users: user['user_type'] = 'user'
+        for admin in admins: admin['user_type'] = 'admin'
+        both = admins + users
+
         response = {}
-        print admins
-        d = next((item for item in admins if item["email"] == email), None)
+        # print admins
+        d = next((item for item in both if item["email"] == email), None)
         if d is not None:
-            if pwd == d['password']: 
+            if pwd == d['password']:
                 response['token'] = d['key']
                 response['id'] = d['id']
+                response['user_type'] = d['user_type']
         print response
         self.response.write(json.dumps(response))
         # print Auth().checkToken(email, response['token'], 'admin')
