@@ -123,7 +123,7 @@ class LineEntry(webapp2.RequestHandler):
             out['created'] = created
             self.response.write(json.dumps(out))
         else: # return all line entries
-            lines = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).fetch()]
+            lines = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).order(-db_definitions.LineEntry.created).fetch()]
             users = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
             print "LOLZZZ"
             print lines
