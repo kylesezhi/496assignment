@@ -123,7 +123,7 @@ class LineEntry(webapp2.RequestHandler):
             out['created'] = created
             self.response.write(json.dumps(out))
         else: # return all line entries
-            lines = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).order(-db_definitions.LineEntry.created).fetch()]
+            lines = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).order(db_definitions.LineEntry.created).fetch()]
             users = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
             print "LOLZZZ"
             print lines
@@ -139,24 +139,25 @@ class LineEntry(webapp2.RequestHandler):
     def put(self, **kwargs):
         # Creates LineEntry
         
-        # GET KEY FROM ID
-        if 'user' in kwargs:
-            user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
-            
+        if 'lineentry' in kwargs:
+            users = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
+            d = next((item for item in users if item["id"] == int(kwargs['lineentry'])), None)
+            user_key = ndb.Key(urlsafe=d['key'])
+
             line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
             line = db_definitions.LineEntry(parent=line_key)
             line.user = user_key
             line.put()
-            out = line.to_dict()
+            out = line.return_dict()
             self.response.write(json.dumps(out))
             return
         return
 
     def post(self):
-        # Creates LineEntry
+        # Deletes LineEntry
         
         # POST variables:
-            # user = (id) ndb.KeyProperty(required=True)
+            # lineentry = required
             # token = an admin token
         
         # AUTHENTICATE FOR ADMIN ONLY
@@ -165,23 +166,11 @@ class LineEntry(webapp2.RequestHandler):
             self.response.set_status(403, "Forbidden. Must be an admin.")
             self.response.write(self.response.status)
 
-        users = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
-        d = next((item for item in users if item["id"] == int(self.request.get('user'))), None)
-        user_key = ndb.Key(urlsafe=d['key'])
-        
-        # PREVENT MULTIPLE ENTRIES FOR STUDENT
-        # users = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
-        # d = next((item for item in users if item["key"] == self.request.get('user')), None)
-        # if d is not None:
-        #     self.response.set_status(400, "Bad request. User is already in line.")
-        #     self.response.write(self.response.status)
+        lines = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).fetch()]
+        d = next((item for item in lines if item["id"] == int(self.request.get('lineentry'))), None)
+        line_key = ndb.Key(urlsafe=d['key'])
 
-        line_key = ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))
-        line = db_definitions.LineEntry(parent=line_key)
-        line.user = user_key
-        line.put()
-        out = line.return_dict()
-        self.response.write(json.dumps(out))
+        line_key.delete()
         return
 
 class Login(Auth):
@@ -194,9 +183,6 @@ class Login(Auth):
             """
         pwd = self.request.get('password', default_value=None)
         email = self.request.get('email', default_value=None)
-        print "DEBUGzzz"
-        # print pwd
-        # print email
         admins = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('admin-group'))).fetch()]
         users = [x.emailAndPass() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
         for user in users: user['user_type'] = 'user'
@@ -213,5 +199,4 @@ class Login(Auth):
                 response['user_type'] = d['user_type']
         print response
         self.response.write(json.dumps(response))
-        # print Auth().checkToken(email, response['token'], 'admin')
         return
