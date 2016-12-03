@@ -34,9 +34,6 @@ class User(webapp2.RequestHandler):
             for user in users: user['user_type'] = 'user'
             for admin in admins: admin['user_type'] = 'admin'
             
-            # q = db_definitions.User.query()
-            # keys = q.fetch(keys_only = True)
-            # results = {'ids': [x.id() for x in keys]}
             self.response.write(json.dumps(users + admins))
         
     def post(self):
@@ -90,15 +87,12 @@ class User(webapp2.RequestHandler):
     def delete(self, **kwargs):
         if 'user' in kwargs:
             user_key = ndb.Key(db_definitions.User, self.app.config.get('user-group'), db_definitions.User, int(kwargs['user']))
-            # admin_key = ndb.Key(db_definitions.User, self.app.config.get('admin-group'), db_definitions.User, int(kwargs['user']))
 
             # REMOVE RELATED PLACE IN LINE
             lineentries = db_definitions.LineEntry.query()
             for lineentry in lineentries:
                 if lineentry.user == user_key:
                     lineentry.key.delete()
-                # if lineentry.user == admin_key:
-                #     lineentry.key.delete()
 
             # REMOVE USER
             user_key.delete()
@@ -125,14 +119,11 @@ class LineEntry(webapp2.RequestHandler):
         else: # return all line entries
             lines = [x.return_dict() for x in db_definitions.LineEntry.query(ancestor=ndb.Key(db_definitions.LineEntry, self.app.config.get('default-group'))).order(db_definitions.LineEntry.created).fetch()]
             users = [x.return_dict() for x in db_definitions.User.query(ancestor=ndb.Key(db_definitions.User, self.app.config.get('user-group'))).fetch()]
-            print "LOLZZZ"
-            print lines
             for line in lines:
                 if 'key' in line: del line['key']
                 d = next((user for user in users if user["key"] == line['user']), None)
                 line['username'] = d['first_name'] + ' ' + d['last_name']
                 if 'user' in line: del line['user']
-            print lines
             self.response.write(json.dumps(lines))
             return
         
