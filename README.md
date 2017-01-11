@@ -1,28 +1,26 @@
-Final Project
-CS 496
-Kyle Bedell
-bedellk@oregonstate.edu
-Introduction
+# Line App for Google App Engine
+## Introduction
 My friend is an ESL instructor at a community college. After classes, he holds one-to-one question and answer sessions with students. He has a paper list that they sign up on, and he crosses them out one by one as he goes. They wait for him in the computer lab and he walks around to them.
 
 Instead of always having to go back to the master list to see who is next and cross him or her off the list, I thought it might be nice to have a web app that allows students to sign up to the list and teachers to cross them off. Most students and teachers have smartphones, so an iOS app was a logical choice.
 
 This application is implemented using the Ionic framework, which has the benefit of creating mobile applications that can be built on both Android and iOS. This particular project is targeted towards iOS.
-Video
+## Video
 For a brief walkthrough of the features of this application, please see this video:
 https://www.dropbox.com/s/23ehi4u8mp15aqd/final-project-video.mp4?dl=0
-API
-In your written documentation you should document your restful API. Give us the list of URIs, what calls to those URIs do using the 4 major HTTP verbs (GET, POST, PUT and DELETE)
+## API
 The base URL for the API calls is: https://project-4-144319.appspot.com
 
-Also, you can point your browser to the above URL to access a simple HTML admin interface for the application. The following accounts have been authorized to access it: wolfordj@onid.oregonstate.edu, basag@oregonstate.edu and subraman@oregonstate.edu.
+Also, you can point your browser to the above URL to access a simple HTML admin interface for the application.
 
 The API uses all 4 major HTTP verbs. All variables are required unless otherwise stated.
-Get All User Information
+### Get All User Information
 GET /api/user
-Returns JSON representing all users in the system:
 
-Get One User's Information
+Returns JSON representing all users in the system:
+![json](https://raw.githubusercontent.com/kylesezhi/line-app-gae/master/image00.png "json")
+
+### Get One User's Information
 GET /api/user/[user ID]
 Returns JSON representing the queried user.
 Edit Existing User's Information
@@ -83,5 +81,3 @@ As a project for this class, this application was built to fulfill the requireme
 For the purposes of my friend the teacher, this application should prove useful with the addition of support for student logins (they were not implemented in this version due to time constraints). From a technical standpoint the application should improve its security for user authentication. Passwords are passed in the open, and tokens are easily decipherable to entities saved in the datastore.
 
 A viable alternative to this would be either using Google's built-in user authentication, which would require all users to have a Google account, or JSON Web Tokens. Both would ensure better security than the application as it works now.
-
-
