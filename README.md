@@ -18,21 +18,26 @@ The API uses all 4 major HTTP verbs. All variables are required unless otherwise
 GET /api/user
 
 Returns JSON representing all users in the system:
+
 ![json](https://raw.githubusercontent.com/kylesezhi/line-app-gae/master/image00.png "json")
 
 ### Get One User's Information
 GET /api/user/[user ID]
+
 Returns JSON representing the queried user.
-Edit Existing User's Information
+### Edit Existing User's Information
 POST /api/user/
+
 POST variables:
-first_name - string
-last_name - string
-email - string
-token - admin user token for the user to be changed
+   first_name - string
+   last_name - string
+   email - string
+   token - admin user token for the user to be changed
+	 
 Returns JSON representing the updated user.
-Create New User
+### Create New User
 POST /api/user/
+
 POST variables:
 first_name - string
 last_name - string
