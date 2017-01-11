@@ -29,9 +29,13 @@ Returns JSON representing the queried user.
 POST /api/user/
 
 POST variables:
+
    first_name - string
+	 
    last_name - string
+	 
    email - string
+	 
    token - admin user token for the user to be changed
 	 
 Returns JSON representing the updated user.
